@@ -1,8 +1,28 @@
-# filebrowser-ocp-privileged
-Repo with all required steps to create a privileged SA to run Filebrowser, and expose it
+# FileBrowser
 
+As fast files exchange point, public.
 
+# TL;DR;
 
+````bash
+./deploy_all.sh
+````
+
+# Requirements
+
+- OpenShift Container Platform cluster (tested with 4.9 and 4.10)
+- Default Storage Class configured
+- Cluster-Admin account to execute it
+
+# Created resources
+
+- Namespace
+- Service Account
+- Cluster Role Binding (privileged)
+- Statefulset (with 10Gi pvc)
+- Service
+- Route
+- Configmap
 
 ## License
 
