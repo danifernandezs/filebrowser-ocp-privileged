@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: filebrowser
+  namespace: filebrowser
+spec:
+  serviceName: filebrowser
+  replicas: 1
+  selector:
+    matchLabels:
+      app: filebrowser
+  template:
+    metadata:
+      labels:
+        app: filebrowser
+    spec:
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: filebrowser-privileged
+      containers:
+        - name: filebrowser
+          securityContext:
+            runAsUser: 0
+          image: 'filebrowser/filebrowser:v2.21.1-s6'
+          ports:
+            - containerPort: 8080
+              name: front
+          volumeMounts:
+            - name: storage
+              mountPath: /srv
+            - name: settings
+              mountPath: /config/settings.json
+              subPath: settings.json
+      volumes:
+        - name: settings
+          configMap:
+            name: filebrowser-settings
+
+  volumeClaimTemplates:
+    - metadata:
+        name: storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+
+
